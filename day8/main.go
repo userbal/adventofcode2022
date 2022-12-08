@@ -65,20 +65,6 @@ func convert(input string) *[][]tree {
 	return &trees
 }
 
-func check(trees []int) []bool {
-	visible := []bool{}
-	highest := 0
-	for _, tree := range trees {
-		if tree > highest {
-			highest = tree
-			visible = append(visible, true)
-		} else {
-			visible = append(visible, false)
-		}
-	}
-	return visible
-}
-
 func checkAll(trees *[][]tree) {
 	xlen := len((*trees)[0])
 	ylen := len(*trees)
