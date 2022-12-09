@@ -8,7 +8,7 @@ import (
 	"strings"
 )
 
-type tree struct {
+type Tree struct {
 	height  int
 	visible bool
 }
@@ -39,24 +39,24 @@ const testInput = `30373
 // tftft
 // ttftf
 
-func convert(input string) *[][]tree {
+func Convert(input string) *[][]Tree {
 	data := strings.Split(input, "")
-	trees := [][]tree{}
+	trees := [][]Tree{}
 
 	fmt.Printf("len(data): %v\n", len(data))
 
-	row := []tree{}
+	row := []Tree{}
 	for _, v := range data {
 		if v == "\n" {
 			trees = append(trees, row)
-			row = []tree{}
+			row = []Tree{}
 		} else {
 			h, err := strconv.Atoi(v)
 			if err != nil {
 				panic(err)
 			}
 
-			row = append(row, tree{height: h})
+			row = append(row, Tree{height: h})
 		}
 
 	}
@@ -65,54 +65,28 @@ func convert(input string) *[][]tree {
 	return &trees
 }
 
-func checkAll(trees *[][]tree) {
-	xlen := len((*trees)[0])
-	ylen := len(*trees)
+// func main() {
+// 	data, err := os.ReadFile("data.txt")
+// 	if err != nil {
+// 		log.Fatal(err)
+// 	}
 
-	// left
-	for i := 0; i < ylen; i++ {
-		highest := -1
-		for j := 0; j < xlen; j++ {
-			if (*trees)[i][j].height > highest {
-				highest = (*trees)[i][j].height
-				(*trees)[i][j].visible = true
-			}
-		}
-	}
-	// right
-	for i := 0; i < ylen; i++ {
-		highest := -1
-		for j := xlen - 1; j >= 0; j-- {
-			if (*trees)[i][j].height > highest {
-				highest = (*trees)[i][j].height
-				(*trees)[i][j].visible = true
-			}
-		}
-	}
+// 	trees := Convert(string(data))
 
-	// top
-	for x := 0; x < xlen; x++ {
-		highest := -1
-		for y := 0; y < ylen; y++ {
-			if (*trees)[y][x].height > highest {
-				highest = (*trees)[y][x].height
-				(*trees)[y][x].visible = true
-			}
+// 	checkAll(trees)
 
-		}
-	}
-	// // bottom
-	for x := 0; x < xlen; x++ {
-		highest := -1
-		for y := ylen - 1; y > 0; y-- {
-			if (*trees)[y][x].height > highest {
-				highest = (*trees)[y][x].height
-				(*trees)[y][x].visible = true
-			}
+// 	visible := 0
+// 	for _, row := range *trees {
+// 		for _, tree := range row {
+// 			if tree.visible {
+// 				visible += 1
+// 			} else {
+// 			}
+// 		}
+// 	}
 
-		}
-	}
-}
+// 	fmt.Printf("visible: %v\n", visible)
+// }
 
 func main() {
 	data, err := os.ReadFile("data.txt")
@@ -120,19 +94,18 @@ func main() {
 		log.Fatal(err)
 	}
 
-	trees := convert(string(data))
+	trees := Convert(string(data))
 
-	checkAll(trees)
+	// trees := Convert(testInput2)
 
-	visible := 0
-	for _, row := range *trees {
-		for _, tree := range row {
-			if tree.visible {
-				visible += 1
-			} else {
-			}
-		}
-	}
-
-	fmt.Printf("visible: %v\n", visible)
+	x, y, score := findBestTree(trees)
+	fmt.Printf("x: %v, y: %v \n", x, y)
+	fmt.Printf("score: %v\n", score)
+	fmt.Println((*trees)[4][1].height)
 }
+
+// func main() {
+// 	trees := Convert(testInput2)
+// 	score := calcViewableTreeScore(trees, 2, 3)
+// 	fmt.Printf("score: %v\n", score)
+// }
